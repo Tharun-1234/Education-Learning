@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div class="form-container">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <input type="text" name="username" placeholder="Username" required />
+            <input type="password" name="password" placeholder="Password" required />
+            <button type="submit">Login</button>
+            <p>New user? <a href="register.html">Register here</a></p>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const username = this.username.value.trim();
+            const password = this.password.value.trim();
+
+            try {
+                const res = await fetch('/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ username, password })
+                });
+
+                if (res.ok) {
+                    // If login successful → redirect to HomePage
+                    window.location.href = 'index.html';
+                } else {
+                    const errorText = await res.text();
+                    alert(errorText);
+                }
+            } catch (err) {
+                alert('Error connecting to server.');
+                console.error(err);
+            }
+        });
+    </script>
+</body>
+
+</html>
